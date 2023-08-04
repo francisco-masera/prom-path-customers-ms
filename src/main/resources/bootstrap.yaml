@@ -1,0 +1,26 @@
+spring:
+  application.name: customer-ms
+  profiles.active: dev
+  cloud:
+    config:
+      name: customer-ms
+      profile: dev
+      discovery:
+        service-id: config-server
+        enabled: true
+server.port: 9001
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8082/eureka/
+routing:
+  product-ms:
+    host: ${feign.product-ms.host}
+    id: ${feign.product-ms.id}
+    url: ${feign.product-ms.url}
+    port: ${feign.product-ms.port}
+    wishlist-url: ${feign.product-ms.wishlist-url}
+    create-url: ${feign.product-ms.create-url}
+
