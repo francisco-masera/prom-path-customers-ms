@@ -2,6 +2,13 @@ spring:
   application.name: customer-ms
   profiles.active: dev
   cloud:
+    vault:
+      token: ${VAULT_TOKEN}
+      authentication: token
+      uri: http://vault:8200
+      kv:
+        default-context: customer
+        backend: secret
     config:
       name: customer-ms
       profile: dev
@@ -14,7 +21,7 @@ eureka:
     preferIpAddress: true
   client:
     serviceUrl:
-      defaultZone: http://localhost:8082/eureka/
+      defaultZone: http://discovery-server:8082/eureka/
 routing:
   product-ms:
     host: ${feign.product-ms.host}

@@ -23,4 +23,5 @@ public interface ProductClient {
 
     @PostMapping("/${routing.product-ms.create-url}")
     WishListDto createProducts(@RequestBody WishListDto products);
+
 }

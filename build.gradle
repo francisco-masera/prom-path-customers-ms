@@ -9,7 +9,7 @@ group = 'org.dargor'
 version = '0.0.1-SNAPSHOT'
 
 java {
-    sourceCompatibility = "17"
+    sourceCompatibility = '11'
 }
 
 configurations {
@@ -36,6 +36,7 @@ dependencies {
             'org.springframework.cloud:spring-cloud-starter-config',
             'org.springframework.cloud:spring-cloud-starter-openfeign',
             'org.springframework.cloud:spring-cloud-config-client',
+            'org.springframework.cloud:spring-cloud-starter-vault-config',
             'org.springframework.cloud:spring-cloud-starter-bootstrap',
             'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client',
             'org.mapstruct:mapstruct:1.5.5.Final'
@@ -44,10 +45,11 @@ dependencies {
 
     productionRuntimeClasspath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3'
 
+    runtimeOnly 'org.postgresql:postgresql'
+
     compileOnly(
             'org.springframework.cloud:spring-cloud-starter-sleuth',
-            'org.projectlombok:lombok',
-            'com.h2database:h2',
+            'org.projectlombok:lombok'
 
     )
 
@@ -70,7 +72,7 @@ dependencyManagement {
 }
 
 jar {
-    enabled = false
+    enabled = true
     manifest {
         attributes(
                 'Main-Class': 'org.dargor.customer.CustomersMsApplication'
@@ -84,6 +86,7 @@ apply plugin: "org.sonarqube"
 bootJar {
     enabled = true
 }
+
 tasks.named('test') {
     useJUnitPlatform()
 }
