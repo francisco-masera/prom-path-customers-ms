@@ -1,10 +1,7 @@
 package org.dargor.customer.app.controller;
 
 import lombok.AllArgsConstructor;
-import org.dargor.customer.app.dto.CustomerCreationRequestDto;
-import org.dargor.customer.app.dto.CustomerDto;
-import org.dargor.customer.app.dto.CustomerUpdateRequestDto;
-import org.dargor.customer.app.dto.WishListDto;
+import org.dargor.customer.app.dto.*;
 import org.dargor.customer.app.service.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,7 +21,7 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @PostMapping(value = "/create", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<WishListDto> createCustomer(@RequestBody @Valid CustomerCreationRequestDto request) {
+    public ResponseEntity<WishListResponseDto> createCustomer(@RequestBody @Valid CustomerCreationRequestDto request) {
         var response = customerService.createCustomer(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -42,7 +39,7 @@ public class CustomerController {
     }
 
     @GetMapping(value = "/wish-list/{customerId}", produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<WishListDto> getWishList(@PathVariable UUID customerId) {
+    public ResponseEntity<WishListResponseDto> getWishList(@PathVariable UUID customerId) {
         var response = customerService.getWishList(customerId);
         return ResponseEntity.ok(response);
     }

@@ -1,9 +1,6 @@
 package org.dargor.customer.app.service;
 
-import org.dargor.customer.app.dto.CustomerCreationRequestDto;
-import org.dargor.customer.app.dto.CustomerDto;
-import org.dargor.customer.app.dto.CustomerUpdateRequestDto;
-import org.dargor.customer.app.dto.WishListDto;
+import org.dargor.customer.app.dto.*;
 
 import java.util.UUID;
 
@@ -14,8 +11,8 @@ public interface CustomerService {
 
     CustomerDto getCustomer(UUID customerId);
 
-    WishListDto createCustomer(CustomerCreationRequestDto customerCreationRequest);
+    WishListResponseDto createCustomer(CustomerCreationRequestDto customerCreationRequest);
 
-    WishListDto getWishList(UUID customerId);
+    WishListResponseDto getWishList(UUID customerId);
 
 }

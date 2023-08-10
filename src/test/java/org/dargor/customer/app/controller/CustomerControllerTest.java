@@ -52,7 +52,7 @@ class CustomerControllerTest {
     void createCustomer() throws Exception {
 
         when(customerService.createCustomer(any()))
-                .thenReturn(MockedTestData.getWishListDto());
+                .thenReturn(MockedTestData.getWishListResponseDto());
 
         var response = mockMvc.perform(post("/customer/create")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -101,7 +101,7 @@ class CustomerControllerTest {
     void getWishList() throws Exception {
 
         when(customerService.getWishList(any()))
-                .thenReturn(MockedTestData.getWishListDto());
+                .thenReturn(MockedTestData.getWishListResponseDto());
 
         var response = mockMvc.perform(get("/customer/wish-list/" + UUID.randomUUID()))
                 .andExpect(status().isOk())

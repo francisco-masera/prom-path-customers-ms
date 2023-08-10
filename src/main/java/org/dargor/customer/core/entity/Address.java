@@ -1,16 +1,14 @@
 package org.dargor.customer.core.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.UUID;
 
-@Data
 @Entity
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,7 +27,7 @@ public class Address {
 
     private String city;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 

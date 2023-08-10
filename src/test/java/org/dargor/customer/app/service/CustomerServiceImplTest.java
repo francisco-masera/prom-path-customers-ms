@@ -11,7 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -29,12 +28,12 @@ class CustomerServiceImplTest {
 
     @Mock
     private ProductClient productClient;
-    
+
     @Test
     @DisplayName("createCustomer - OK")
     void createCustomer() {
 
-        var wishListDto = MockedTestData.getWishListDto();
+        var wishListDto = MockedTestData.getWishListResponseDto();
 
         when(customerRepository.save(any()))
                 .thenReturn(MockedTestData.getCustomerWithId());
@@ -85,7 +84,7 @@ class CustomerServiceImplTest {
     void getWishList() {
 
         when(productClient.getWishList(any()))
-                .thenReturn(List.of(MockedTestData.getProductDto()));
+                .thenReturn(MockedTestData.getWishListResponseDto());
 
         when(customerRepository.getById(any()))
                 .thenReturn(MockedTestData.getCustomerWithId());

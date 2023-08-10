@@ -10,8 +10,8 @@ import java.util.UUID;
 
 public class MockedTestData {
 
-    public static WishListDto getWishListDto() {
-        return WishListDto.builder()
+    public static WishListResponseDto getWishListResponseDto() {
+        return WishListResponseDto.builder()
                 .customer(getCustomerDto())
                 .products(List.of(getProductDto()))
                 .build();
@@ -75,7 +75,7 @@ public class MockedTestData {
                 .build();
     }
 
-    public static CustomerUpdateRequestDto getCustomerUpdateRequestDto(){
+    public static CustomerUpdateRequestDto getCustomerUpdateRequestDto() {
         return CustomerUpdateRequestDto.builder()
                 .id(UUID.randomUUID())
                 .firstName("firstname")

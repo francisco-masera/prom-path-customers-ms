@@ -3,10 +3,7 @@ package org.dargor.customer.app.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dargor.customer.app.client.ProductClient;
-import org.dargor.customer.app.dto.CustomerCreationRequestDto;
-import org.dargor.customer.app.dto.CustomerDto;
-import org.dargor.customer.app.dto.CustomerUpdateRequestDto;
-import org.dargor.customer.app.dto.WishListDto;
+import org.dargor.customer.app.dto.*;
 import org.dargor.customer.app.exception.CustomException;
 import org.dargor.customer.app.exception.ErrorDefinition;
 import org.dargor.customer.core.repository.CustomerRepository;
@@ -28,14 +25,18 @@ public class CustomerServiceImpl implements CustomerService {
     private final ProductClient productClient;
 
     @Override
-    public WishListDto createCustomer(CustomerCreationRequestDto request) {
+    public WishListResponseDto createCustomer(CustomerCreationRequestDto request) {
         try {
             var customer = customerMapper.customerCreationRequestToCustomer(request);
+            log.info(String.format("Customer %s", customer));
             var savedCustomer = customerRepository.save(customer);
-            var customerResponse = customerMapper.customerToCustomerResponse(savedCustomer);
-            var wishListResponse = productMapper.toWishListDto(customerResponse, request.getProducts());
-            var products = productClient.createProducts(wishListResponse);
-            wishListResponse.setProducts(products.getProducts());
+            log.info(String.format("Saved Customer %s", customer));
+            var customerDto = customerMapper.customerToCustomerDto(savedCustomer);
+            log.info(String.format("Customer response %s", customerDto));
+            var wishListRequest = productMapper.toWishListRequestDto(customer.getId(), request.getProducts());
+            log.info(String.format("WishListDTO response %s", wishListRequest));
+            var products = productClient.createProducts(wishListRequest);
+            var wishListResponse = productMapper.toWishListResponseDto(products, customerDto);
             log.info(String.format("Customer created successfully [request: %s] [response: %s]", request, wishListResponse));
             return wishListResponse;
         } catch (Exception e) {
@@ -51,7 +52,7 @@ public class CustomerServiceImpl implements CustomerService {
                 throw new CustomException(ErrorDefinition.INVALID_INPUT_DATA.getMessage(), null);
 
             var customer = customerRepository.getById(customerId);
-            var response = customerMapper.customerToCustomerResponse(customer);
+            var response = customerMapper.customerToCustomerDto(customer);
             log.info(String.format("Customer fetched successfully [customerId: %s] [response: %s]", customerId, response.toString()));
             return response;
         } catch (Exception e) {
@@ -65,7 +66,7 @@ public class CustomerServiceImpl implements CustomerService {
         try {
             var customer = customerMapper.customerUpdateRequestToCustomer(request);
             var updatedCustomer = customerRepository.save(customer);
-            var response = customerMapper.customerToCustomerResponse(updatedCustomer);
+            var response = customerMapper.customerToCustomerDto(updatedCustomer);
             log.info(String.format("Customer updated successfully [request: %s] [response: %s]", request.toString(), response.toString()));
             return response;
         } catch (Exception e) {
@@ -74,20 +75,17 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
-    public WishListDto getWishList(UUID customerId) {
+    public WishListResponseDto getWishList(UUID customerId) {
         try {
             if (ObjectUtils.isEmpty(customerId))
                 throw new CustomException(ErrorDefinition.INVALID_INPUT_DATA.getMessage(), null);
-
             var wishList = productClient.getWishList(customerId);
             log.info(String.format("Products fetched successfully [products %s]", wishList.toString()));
-
             var customer = customerRepository.getById(customerId);
             log.info(String.format("Customer fetched successfully [entity %s]", customer));
-
-            var response = productMapper.toWishListDto(customer, wishList);
+            var customerDto = customerMapper.customerToCustomerDto(customer);
+            var response = productMapper.toWishListResponseDto(wishList, customerDto);
             log.info(String.format("Request performed successfully [request: %s] [response: %s]", customerId, response.toString()));
-
             return response;
         } catch (Exception e) {
             log.error(String.format("Error found adding products to cart for customer [id: %s] [error: %s]", customerId, e.getMessage()));

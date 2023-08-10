@@ -6,14 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class WishListDto {
+public class WishListRequestDto {
 
-    private CustomerDto customer;
+    private UUID customerId;
 
     private List<ProductDto> products;
 
