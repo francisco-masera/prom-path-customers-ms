@@ -21,7 +21,7 @@ eureka:
     preferIpAddress: true
   client:
     serviceUrl:
-      defaultZone: http://ghcr.io/dargor94/discovery-server:8082/eureka/
+      defaultZone: http://discovery-server:8082/eureka/
 routing:
   product-ms:
     host: ${feign.product-ms.host}
