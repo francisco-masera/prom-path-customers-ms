@@ -38,7 +38,6 @@ dependencies {
             'org.springframework.cloud:spring-cloud-config-client',
             'org.springframework.cloud:spring-cloud-starter-vault-config',
             'org.springframework.cloud:spring-cloud-starter-bootstrap',
-            'org.springframework.cloud:spring-cloud-starter-loadbalancer',
             'io.opentracing.contrib:opentracing-spring-jaeger-cloud-starter:3.3.1',
             'org.mapstruct:mapstruct:1.5.5.Final',
     )
