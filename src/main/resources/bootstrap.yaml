@@ -20,7 +20,6 @@ server.port: 9001
 routing:
   product-ms:
     host: ${feign.product-ms.host}
-    id: ${feign.product-ms.id}
     url: ${feign.product-ms.url}
     port: ${feign.product-ms.port}
     wishlist-url: ${feign.product-ms.wishlist-url}

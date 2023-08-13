@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.UUID;
 
 @FeignClient(name = "ProductClient",
-        url = "${routing.product-ms.host}:${routing.product-ms.port}/${routing.product-ms.id}/${routing.product-ms.url}",
+        url = "${routing.product-ms.host}:${routing.product-ms.port}/${routing.product-ms.url}",
         configuration = {FeignAuthInterceptor.class}
 )
 public interface ProductClient {
