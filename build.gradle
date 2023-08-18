@@ -12,12 +12,6 @@ java {
     sourceCompatibility = 'VERSION_11'
 }
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
-
 repositories {
     mavenCentral()
 }
@@ -69,21 +63,8 @@ dependencyManagement {
     }
 }
 
-jar {
-    enabled = true
-    manifest {
-        attributes(
-                'Main-Class': 'org.dargor.customer.CustomersMsApplication'
-        )
-    }
-}
-
 apply plugin: 'io.spring.dependency-management'
 apply plugin: "org.sonarqube"
-
-bootJar {
-    enabled = true
-}
 
 tasks.named('test') {
     useJUnitPlatform()
