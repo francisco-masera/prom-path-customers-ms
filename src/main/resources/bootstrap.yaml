@@ -19,9 +19,11 @@ spring:
 server.port: 9001
 routing:
   product-ms:
-    host: ${feign.product-ms.host}
+    #host: ${feign.product-ms.host}
+    host: "http://product-ms"
     url: ${feign.product-ms.url}
-    port: ${feign.product-ms.port}
+    #port: ${feign.product-ms.port}
+    port: 9002
     wishlist-url: ${feign.product-ms.wishlist-url}
     create-url: ${feign.product-ms.create-url}
 resilience4j.circuitbreaker.instances:

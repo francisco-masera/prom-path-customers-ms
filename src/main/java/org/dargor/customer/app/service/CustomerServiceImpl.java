@@ -51,9 +51,9 @@ public class CustomerServiceImpl implements CustomerService {
         return productClient.createProducts(wishListRequestDto);
     }
 
-    public CustomException saveProductsFallback(WishListRequestDto wishListRequestDto, Throwable throwable) {
-        log.info("Fallback error:" + wishListRequestDto.toString());
-        return new CustomException(ErrorDefinition.DDBB_INSERTION_EXCEPTION.getMessage() + ": \n\r" + throwable.getMessage(), null);
+
+    public void saveProductsFallback(Throwable throwable) {
+        throw new CustomException(ErrorDefinition.DDBB_INSERTION_EXCEPTION.getMessage() + ": \n\r" + throwable.getMessage(), null);
     }
 
     private WishListResponseDto mapToWishListResponse(WishListResponseDto products, CustomerDto customerDto) {
