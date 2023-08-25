@@ -10,7 +10,10 @@ public enum ErrorDefinition {
     ENTITY_NOT_FOUND("Entity not found"),
     PATH_NOT_FOUND("Path not found"),
     CONTENT_TYPE_NOT_SUPPORTED("Content type not supported"),
-    NOT_AUTHORIZED("Not Authorized");
+    NOT_AUTHORIZED("Not Authorized"),
+
+    //Fallback
+    DDBB_INSERTION_EXCEPTION("Error found inserting into data base");
 
     private final String message;
 

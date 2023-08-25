@@ -17,4 +17,7 @@ public class CustomException extends RuntimeException {
         this.message = message;
         this.code = code == null ? 490 : code;
     }
+
+
+
 }
