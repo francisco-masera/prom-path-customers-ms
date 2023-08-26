@@ -13,7 +13,7 @@ public enum ErrorDefinition {
     NOT_AUTHORIZED("Not Authorized"),
 
     //Fallback
-    DDBB_INSERTION_EXCEPTION("Error found inserting into data base");
+    SERVICE_UNAVAILABLE("Service is unavailable");
 
     private final String message;
 
