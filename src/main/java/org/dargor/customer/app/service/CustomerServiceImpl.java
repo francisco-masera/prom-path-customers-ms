@@ -1,6 +1,5 @@
 package org.dargor.customer.app.service;
 
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dargor.customer.app.client.ProductClient;
@@ -46,14 +45,8 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
-    @CircuitBreaker(name = "product-ms", fallbackMethod = "saveProductsFallback")
     private WishListResponseDto saveProducts(WishListRequestDto wishListRequestDto) {
         return productClient.createProducts(wishListRequestDto);
-    }
-
-
-    public void saveProductsFallback(Throwable throwable) {
-        throw new CustomException(ErrorDefinition.DDBB_INSERTION_EXCEPTION.getMessage() + ": \n\r" + throwable.getMessage(), null);
     }
 
     private WishListResponseDto mapToWishListResponse(WishListResponseDto products, CustomerDto customerDto) {
@@ -116,7 +109,6 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
-    @CircuitBreaker(name = "product-ms")
     private WishListResponseDto getProducts(UUID customerId) {
         var wishList = productClient.getWishList(customerId);
         log.info(String.format("Products fetched successfully [products %s]", wishList.toString()));
