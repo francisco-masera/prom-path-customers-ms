@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-ms
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customer-ms
+  template:
+    metadata:
+      labels:
+        app: customer-ms
+    spec:
+      containers:
+        - name: customer-ms
+          image: dargorcr.azurecr.io/customer-ms:latest
+          ports:
+            - containerPort: 9001
