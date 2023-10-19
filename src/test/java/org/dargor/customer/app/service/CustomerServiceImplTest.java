@@ -38,7 +38,7 @@ class CustomerServiceImplTest {
         when(customerRepository.save(any()))
                 .thenReturn(MockedTestData.getCustomerWithId());
         when(productClient.createProducts(any()))
-                .thenReturn(wishListDto);
+                .thenReturn(wishListDto.getProducts());
 
         var actual = customerService.createCustomer(MockedTestData.getCustomerCreationRequestDto());
 
@@ -84,7 +84,7 @@ class CustomerServiceImplTest {
     void getWishList() {
 
         when(productClient.getWishList(any()))
-                .thenReturn(MockedTestData.getWishListResponseDto());
+                .thenReturn(MockedTestData.getWishListResponseDto().getProducts());
 
         when(customerRepository.getById(any()))
                 .thenReturn(MockedTestData.getCustomerWithId());

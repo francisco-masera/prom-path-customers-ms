@@ -17,10 +17,10 @@ public interface ProductMapper {
     WishListRequestDto toWishListRequestDto(UUID customerId, List<ProductDto> products);
 
 
-    default WishListResponseDto toWishListResponseDto(WishListResponseDto wishList, CustomerDto customerDto) {
+    default WishListResponseDto toWishListResponseDto(List<ProductDto> wishList, CustomerDto customerDto) {
 
         return WishListResponseDto.builder()
-                .products(wishList.getProducts())
+                .products(wishList)
                 .customer(customerDto)
                 .build();
 
