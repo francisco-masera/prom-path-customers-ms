@@ -17,6 +17,7 @@ spec:
       containers:
         - name: customer-ms
           image: ghcr.io/dargor94/customer-ms:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 9001
           env:
