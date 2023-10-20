@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class TraceConfig {
+public class JaegerConfig {
 
     @Bean
     public JaegerTracer jaegerTracer(@Value("${spring.application.name}") String appName) {
