@@ -90,7 +90,7 @@ public class CustomerServiceImpl implements CustomerService {
             log.info(String.format("Request performed successfully [request: %s] [response: %s]", customerId, response.toString()));
             return response;
         } catch (Exception e) {
-            log.error(String.format("Error found adding products to cart for customer [id: %s] [error: %s]", customerId, e.getMessage()));
+            log.error(String.format("Error found getting customer products [id: %s] [error: %s]", customerId, e.getMessage()));
             throw e;
         }
     }
