@@ -1,9 +1,9 @@
 package org.dargor.customer.core.util.mapper;
 
-import org.dargor.customer.app.dto.AddressDto;
-import org.dargor.customer.app.dto.CustomerCreationRequestDto;
-import org.dargor.customer.app.dto.CustomerDto;
-import org.dargor.customer.app.dto.CustomerUpdateRequestDto;
+import org.dargor.customer.app.dto.request.AddressRequestDto;
+import org.dargor.customer.app.dto.request.CustomerCreationRequestDto;
+import org.dargor.customer.app.dto.response.CustomerResponseDto;
+import org.dargor.customer.app.dto.request.CustomerUpdateRequestDto;
 import org.dargor.customer.core.entity.Address;
 import org.dargor.customer.core.entity.Customer;
 import org.dargor.customer.core.util.EncoderUtil;
@@ -27,7 +27,7 @@ public interface CustomerMapper {
                 .active(Boolean.TRUE)
                 .firstName(customerCreationRequestDto.getFirstName())
                 .lastName(customerCreationRequestDto.getLastName())
-                .password(EncoderUtil.passwordEncoder(customerCreationRequestDto.getPassword()))
+                .password(EncoderUtil.encodePassword(customerCreationRequestDto.getPassword()))
                 .build();
         customer.setAddresses(addressDtoListToAddresses(customerCreationRequestDto.getAddresses(), customer));
         return customer;
@@ -35,7 +35,7 @@ public interface CustomerMapper {
     }
 
     @Named("addressDtoListToAddresses")
-    default List<Address> addressDtoListToAddresses(List<AddressDto> addresses, Customer customer) {
+    default List<Address> addressDtoListToAddresses(List<AddressRequestDto> addresses, Customer customer) {
         return addresses
                 .stream()
                 .map(addressDto -> Address.builder()
@@ -49,17 +49,17 @@ public interface CustomerMapper {
 
     @Named("addressDtoListToAddresses")
     @IterableMapping(qualifiedByName = "addressDtoToAddress")
-    List<Address> addressDtoListToAddresses(List<AddressDto> addresses);
+    List<Address> addressDtoListToAddresses(List<AddressRequestDto> addresses);
 
     @Named("addressDtoToAddress")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "customer", ignore = true)
-    Address addressDtoToAddress(AddressDto addressDto);
+    Address addressDtoToAddress(AddressRequestDto addressRequestDto);
 
-    CustomerDto customerToCustomerDto(Customer customer);
+    CustomerResponseDto customerToCustomerDto(Customer customer);
 
     @Mapping(target = "addresses", source = "addresses", qualifiedByName = "addressDtoListToAddresses")
-    @Mapping(target = "password", expression = "java(org.dargor.customer.core.util.EncoderUtil.passwordEncoder(customerUpdateRequest.getPassword()))")
+    @Mapping(target = "password", expression = "java(org.dargor.customer.core.util.EncoderUtil.encodePassword(customerUpdateRequest.getPassword()))")
     Customer customerUpdateRequestToCustomer(CustomerUpdateRequestDto customerUpdateRequest);
 
 }

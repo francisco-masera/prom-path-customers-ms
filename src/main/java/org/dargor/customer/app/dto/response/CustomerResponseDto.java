@@ -1,23 +1,25 @@
-package org.dargor.customer.app.dto;
+package org.dargor.customer.app.dto.response;
+
+import java.util.List;
+
+import org.dargor.customer.app.dto.request.AddressRequestDto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
-import java.util.UUID;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class CustomerDto {
+public class CustomerResponseDto {
 
-    private UUID id;
+    private String id;
 
     private String firstName;
 
@@ -26,9 +28,8 @@ public class CustomerDto {
     @JsonProperty("user")
     private String email;
 
-    private boolean active;
+    private Boolean active;
 
-    private List<AddressDto> addresses;
-
+    private List<AddressRequestDto> addresses;
 
 }

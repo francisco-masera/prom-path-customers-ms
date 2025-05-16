@@ -1,14 +1,15 @@
-package org.dargor.customer.app.dto;
+package org.dargor.customer.app.dto.request;
+
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import java.util.List;
 
 @Data
 @Builder
@@ -29,8 +30,8 @@ public class CustomerCreationRequestDto {
     @NotEmpty
     private String password;
 
-    private List<AddressDto> addresses;
+    private List<AddressRequestDto> addresses;
 
-    private List<ProductDto> products;
+    private List<ProductRequestDto> products;
 
 }

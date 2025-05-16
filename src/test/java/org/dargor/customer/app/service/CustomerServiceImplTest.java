@@ -1,5 +1,14 @@
 package org.dargor.customer.app.service;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
+import java.util.UUID;
+
 import org.dargor.customer.app.client.ProductClient;
 import org.dargor.customer.app.exception.CustomException;
 import org.dargor.customer.app.util.MockedTestData;
@@ -10,12 +19,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CustomerServiceImplTest {
@@ -51,10 +54,10 @@ class CustomerServiceImplTest {
     @DisplayName("getCustomer - OK")
     void getCustomer() {
 
-        when(customerRepository.getById(any()))
+        when(customerRepository.getReferenceById(any()))
                 .thenReturn(MockedTestData.getCustomerWithId());
 
-        var actual = customerService.getCustomer(UUID.randomUUID());
+        var actual = customerService.getCustomer(UUID.randomUUID().toString());
 
         assertNotNull(actual);
         verifyNoMoreInteractions(customerRepository);
@@ -86,10 +89,10 @@ class CustomerServiceImplTest {
         when(productClient.getWishList(any()))
                 .thenReturn(MockedTestData.getWishListResponseDto().getProducts());
 
-        when(customerRepository.getById(any()))
+        when(customerRepository.getReferenceById(any()))
                 .thenReturn(MockedTestData.getCustomerWithId());
 
-        var actual = customerService.getWishList(UUID.randomUUID());
+        var actual = customerService.getWishList(String.valueOf(UUID.randomUUID()));
 
         assertNotNull(actual);
         verifyNoMoreInteractions(customerRepository, productClient);

@@ -1,4 +1,4 @@
-package org.dargor.customer.app.dto;
+package org.dargor.customer.app.dto.response;
 
 import lombok.*;
 
@@ -8,13 +8,13 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductDto {
+public class ProductResponseDto {
 
     private String denomination;
 
     private String brand;
 
-    private long quantity;
+    private Long quantity;
 
     private BigDecimal unitPrice;
 

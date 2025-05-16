@@ -1,8 +1,11 @@
 package org.dargor.customer.core.util;
 
+import java.util.Optional;
+
+import org.dargor.customer.app.exception.CustomException;
+import org.dargor.customer.app.exception.ErrorDefinition;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ObjectUtils;
 
 @Component
 public class EncoderUtil {
@@ -13,10 +16,10 @@ public class EncoderUtil {
 
     }
 
-    public static String passwordEncoder(String password) {
-        if (!ObjectUtils.isEmpty(password))
-            return bCryptPasswordEncoder.encode(password);
-        return null;
+    public static String encodePassword(String password) {
+        return bCryptPasswordEncoder.encode(Optional.ofNullable(password).orElseThrow(() ->
+              new CustomException(ErrorDefinition.INVALID_INPUT_DATA))
+        );
     }
 
 }

@@ -1,13 +1,11 @@
 package org.dargor.customer.app.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
 @AllArgsConstructor
 public class ErrorResponse {
 

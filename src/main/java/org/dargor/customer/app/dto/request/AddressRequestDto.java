@@ -1,4 +1,4 @@
-package org.dargor.customer.app.dto;
+package org.dargor.customer.app.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class AddressDto {
+public class AddressRequestDto {
 
     private String street;
 

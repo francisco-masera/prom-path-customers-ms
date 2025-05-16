@@ -1,15 +1,16 @@
 package org.dargor.customer.app.exception;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.persistence.EntityNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestControllerAdvice
@@ -20,13 +21,13 @@ public class ExceptionAdviser {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(fieldError -> errors.put(fieldError.getField(), fieldError.getDefaultMessage()));
         var errorMessage = new ErrorResponse(String.format("%s: %s", ErrorDefinition.INVALID_INPUT_DATA.getMessage(), errors), HttpStatus.BAD_REQUEST.value());
-        log.error(String.format("Exception found with code %s for field validation didn't passed.", errorMessage.getCode()));
+        log.error("Exception found with code {} for field validation didn't passed.", errorMessage.getCode());
         return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(CustomException.class)
     public final ResponseEntity<CustomException> customError(CustomException e) {
-        log.error(String.format("Exception found with code %d.", e.getCode()));
+        log.error("Exception found with code {}.", e.getCode());
         return ResponseEntity.status(e.getCode()).body(e);
     }
 
@@ -40,7 +41,7 @@ public class ExceptionAdviser {
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<ErrorResponse> genericError() {
         var errorMessage = new ErrorResponse(ErrorDefinition.UNKNOWN_ERROR.getMessage(), HttpStatus.BAD_REQUEST.value());
-        log.error(String.format("Exception found with code %d.", 490));
+        log.error("Exception found with code {}.", 490);
         return new ResponseEntity<>(errorMessage, null, 490);
     }
 

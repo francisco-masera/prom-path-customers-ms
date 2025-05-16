@@ -1,4 +1,4 @@
-package org.dargor.customer.app.dto;
+package org.dargor.customer.app.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,16 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class WishListRequestDto {
+public class WishListResponseDto {
 
-    private UUID customerId;
+    private CustomerResponseDto customer;
 
-    private List<ProductDto> products;
+    private List<ProductResponseDto> products;
 
 }

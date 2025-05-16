@@ -1,21 +1,25 @@
 package org.dargor.customer.app.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+
 import org.dargor.customer.app.client.ProductClient;
-import org.dargor.customer.app.dto.CustomerCreationRequestDto;
-import org.dargor.customer.app.dto.CustomerDto;
-import org.dargor.customer.app.dto.CustomerUpdateRequestDto;
-import org.dargor.customer.app.dto.WishListResponseDto;
+import org.dargor.customer.app.dto.request.CustomerCreationRequestDto;
+import org.dargor.customer.app.dto.request.CustomerUpdateRequestDto;
+import org.dargor.customer.app.dto.request.WishListRequestDto;
+import org.dargor.customer.app.dto.response.CustomerResponseDto;
+import org.dargor.customer.app.dto.response.ProductResponseDto;
+import org.dargor.customer.app.dto.response.WishListResponseDto;
 import org.dargor.customer.app.exception.CustomException;
 import org.dargor.customer.app.exception.ErrorDefinition;
+import org.dargor.customer.core.entity.Customer;
 import org.dargor.customer.core.repository.CustomerRepository;
 import org.dargor.customer.core.util.mapper.CustomerMapper;
 import org.dargor.customer.core.util.mapper.ProductMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -30,68 +34,62 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public WishListResponseDto createCustomer(CustomerCreationRequestDto request) {
         try {
-            var customer = customerMapper.customerCreationRequestToCustomer(request);
-            log.info(String.format("Customer %s", customer));
-            var savedCustomer = customerRepository.save(customer);
-            log.info(String.format("Saved Customer %s", customer));
-            var customerDto = customerMapper.customerToCustomerDto(savedCustomer);
-            log.info(String.format("Customer response %s", customer));
-            var wishListRequest = productMapper.toWishListRequestDto(customer.getId(), request.getProducts());
-            log.info(String.format("WishListDTO response %s", wishListRequest));
-            var products = productClient.createProducts(wishListRequest);
-            var wishListResponse = productMapper.toWishListResponseDto(products, customerDto);
-            log.info(String.format("Customer created successfully [request: %s] [response: %s]", request, wishListResponse));
-            return wishListResponse;
+            Customer customer = customerMapper.customerCreationRequestToCustomer(request);
+            Customer savedCustomer = customerRepository.save(customer);
+            CustomerResponseDto customerResponseDto = customerMapper.customerToCustomerDto(savedCustomer);
+            WishListRequestDto wishListRequest = productMapper.toWishListRequestDto(customer.getId(), request.getProducts());
+            List<ProductResponseDto> products = productClient.createProducts(wishListRequest);
+            return productMapper.toWishListResponseDto(products, customerResponseDto);
         } catch (Exception e) {
-            log.error(String.format("Error found creating customer [request: %s] [error: %s]", request.toString(), e.getMessage()));
-            throw e;
+            log.error("Error found creating customer [request: {}] [error: {}]", request.toString(), e.getMessage());
+            throw new CustomException(ErrorDefinition.UNKNOWN_ERROR);
         }
     }
 
     @Override
-    public CustomerDto getCustomer(UUID customerId) {
+    public CustomerResponseDto getCustomer(String customerId) {
         try {
-            if (ObjectUtils.isEmpty(customerId))
-                throw new CustomException(ErrorDefinition.INVALID_INPUT_DATA.getMessage(), null);
-            var customer = customerRepository.getById(customerId);
-            var response = customerMapper.customerToCustomerDto(customer);
-            log.info(String.format("Customer fetched successfully [customerId: %s] [response: %s]", customerId, response.toString()));
-            return response;
-        } catch (Exception e) {
-            log.error(String.format("Error found fetching customer [customerId: %s] [error: %s]", customerId, e.getMessage()));
+            if (ObjectUtils.isEmpty(customerId)) {
+                throw new CustomException(ErrorDefinition.INVALID_INPUT_DATA);
+            }
+            Customer customer = customerRepository.getReferenceById(customerId);
+            return customerMapper.customerToCustomerDto(customer);
+        } catch (CustomException e) {
+            log.error("Error found fetching customer [customerId: {}] [error: {}]", customerId, e.getMessage());
             throw e;
+        } catch (Exception e) {
+            log.error("System error found fetching customer [customerId: {}] [error: {}]", customerId, e.getMessage());
+            throw new CustomException(ErrorDefinition.UNKNOWN_ERROR);
         }
     }
 
     @Override
-    public CustomerDto updateCustomer(CustomerUpdateRequestDto request) {
+    public CustomerResponseDto updateCustomer(CustomerUpdateRequestDto request) {
         try {
-            var customer = customerMapper.customerUpdateRequestToCustomer(request);
-            var updatedCustomer = customerRepository.save(customer);
-            var response = customerMapper.customerToCustomerDto(updatedCustomer);
-            log.info(String.format("Customer updated successfully [request: %s] [response: %s]", request.toString(), response.toString()));
-            return response;
+            Customer customer = customerMapper.customerUpdateRequestToCustomer(request);
+            Customer updatedCustomer = customerRepository.save(customer);
+            return customerMapper.customerToCustomerDto(updatedCustomer);
         } catch (Exception e) {
-            log.error(String.format("Error found updating customer [request: %s] [error: %s]", request.toString(), e.getMessage()));
-            throw e;
+            log.error("System error found updating customer [request: {}] [error: {}]", request.toString(), e.getMessage());
+            throw new CustomException(ErrorDefinition.UNKNOWN_ERROR);
         }
     }
 
-    public WishListResponseDto getWishList(UUID customerId) {
+    public WishListResponseDto getWishList(String customerId) {
         try {
-            if (ObjectUtils.isEmpty(customerId))
-                throw new CustomException(ErrorDefinition.INVALID_INPUT_DATA.getMessage(), null);
-            var wishList = productClient.getWishList(customerId);
-            log.info(String.format("Products fetched successfully [products %s]", wishList.toString()));
-            var customer = customerRepository.getById(customerId);
-            log.info(String.format("Customer fetched successfully [entity %s]", customer));
-            var customerDto = customerMapper.customerToCustomerDto(customer);
-            var response = productMapper.toWishListResponseDto(wishList, customerDto);
-            log.info(String.format("Request performed successfully [request: %s] [response: %s]", customerId, response.toString()));
-            return response;
-        } catch (Exception e) {
-            log.error(String.format("Error found getting customer products [id: %s] [error: %s]", customerId, e.getMessage()));
+            if (ObjectUtils.isEmpty(customerId)) {
+                throw new CustomException(ErrorDefinition.INVALID_INPUT_DATA);
+            }
+            List<ProductResponseDto> wishList = productClient.getWishList(customerId);
+            Customer customer = customerRepository.getReferenceById(customerId);
+            CustomerResponseDto customerResponseDto = customerMapper.customerToCustomerDto(customer);
+            return productMapper.toWishListResponseDto(wishList, customerResponseDto);
+        } catch (CustomException e) {
+            log.error("Error found getting customer products [customerId: {}] [error: {}]", customerId, e.getMessage());
             throw e;
+        } catch (Exception e) {
+            log.error("System error found getting customer products [id: {}] [error: {}]", customerId, e.getMessage());
+            throw new CustomException(ErrorDefinition.UNKNOWN_ERROR);
         }
     }
 

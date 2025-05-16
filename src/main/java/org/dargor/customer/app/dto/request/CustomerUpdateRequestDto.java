@@ -1,14 +1,13 @@
-package org.dargor.customer.app.dto;
+package org.dargor.customer.app.dto.request;
 
+import java.util.List;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.UUID;
 
 @Data
 @Builder
@@ -16,8 +15,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CustomerUpdateRequestDto {
 
-    @NotNull
-    private UUID id;
+    @NotBlank
+    private String id;
 
     private String firstName;
 
@@ -28,8 +27,8 @@ public class CustomerUpdateRequestDto {
 
     private String password;
 
-    private boolean active;
+    private Boolean active;
 
-    private List<AddressDto> addresses;
+    private List<AddressRequestDto> addresses;
 
 }
